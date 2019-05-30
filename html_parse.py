@@ -34,12 +34,12 @@ def term_freq(total_string):
     
 def create_index(tf, folder, invert_ind):
     for term in tf:
-        print(type(term))
-        invert_ind["Slide"] =5
         if term in invert_ind:
             invert_ind[term].append({"freq":tf[term], "docID":folder})
+            print("appended", term, folder)
         else:
             invert_ind[term] = [{"freq":tf[term], "docID":folder}]
+            print("added", term, folder)
         
         
 
@@ -55,7 +55,7 @@ def html_parse():
     '''docs is a list of set of words in each doc'''
     docs = list()
     '''i think its dictionary intialization'''
-    invert_ind = defaultdict(list)
+    invert_ind = dict([])
     for folder in webpage_dict:
         address = folder.split("/")
         dir = address[0]
@@ -70,8 +70,7 @@ def html_parse():
                 for p in paragraphs:
                     total_string += p.text
                 tf = term_freq(total_string)
-                print(tf)
-                invert_ind = create_index(tf, folder,invert_ind)
+                create_index(tf, folder,invert_ind)
                 #for x,y in invert_ind:
                 #print(x,"\t",y)
                 
