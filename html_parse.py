@@ -4,6 +4,7 @@ import lxml.etree
 import json
 import os
 from collections import defaultdict
+from bs4 import BeautifulSoup
 
 
 def html_parse():
@@ -18,13 +19,17 @@ def html_parse():
     docs = list()
     for folder in webpage_dict:
         words = set()
-
+        '''print(folder, webpage_dict[folder])'''
         file_name = corpus_all.get_file_name(webpage_dict[folder])
+        print(file_name)
         if file_name != None:
-            with open(file_name, "rb") as html_doc:
-                tree = lxml.etree.HTML(html_doc)
-                etree.tostring(tree)
-
+            with open(file_name, "r") as html_doc:
+                soup = BeautifulSoup(html_doc, "lxml")
+                paragraphs = soup.find_all('p')
+                for p in paragraphs:
+                    print(p.text)
+                
+                    
 """write main function"""
 if __name__ == '__main__':
     html_parse()
