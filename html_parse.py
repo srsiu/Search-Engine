@@ -103,7 +103,6 @@ class InvertedIndex:
     def calculate_tf_idf(self, tf, tid,  N, df):
         return (tf/tid * math.log10(N / df))
 
-        
     def calculate_all_tf_idf(self):
         for term in self.invert_ind:
             for x in range(0, len(self.invert_ind[term])):
@@ -112,7 +111,6 @@ class InvertedIndex:
                     self.invert_ind[term][x]["freq"], self.doc_length[self.invert_ind[term][x]["docID"]],
                     self.num_of_documents, len(self.invert_ind[term]))
 
-    
     def print_inverted_ind(self):
         for term, l in self.invert_ind.items():
            print(term, ":", l)
@@ -125,7 +123,11 @@ class InvertedIndex:
 
     def write_total_docs(self):
     	with open('total_num_docs.txt', 'w') as k:
-    		k.write(self.num_of_documents)
+    		k.write(str(self.num_of_documents))
+      
+    def write_doc_length(self):
+        with open('doc_length.json', 'w') as d:
+            json.dump(self.doc_length, d)
 
 """write main function"""
 if __name__ == '__main__':
