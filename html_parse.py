@@ -56,8 +56,6 @@ class InvertedIndex:
         file_path = os.path.join('.', 'WEBPAGES_RAW', 'bookkeeping.json')
         self.webpage_dict = json.load(open(file_path), encoding="utf-8")
         self.scores = dict()
-
-        
         '''JSON Format   "0/0" : "www.uci.edu" '''
 
     def create_index(self, tf, folder, invert_ind, html_tags):
@@ -85,8 +83,7 @@ class InvertedIndex:
             
             file_name = os.path.join(".", "WEBPAGES_RAW", dir, file)
 
-            print("FILE:", file_name, "|", file, "|", dir)
-            
+            #print("FILE:", file_name, "|", file, "|", dir)
             #i += 1
             #if i > 12:
             #    break
@@ -120,8 +117,10 @@ class InvertedIndex:
     def print_inverted_ind(self):
         for term, l in self.invert_ind.items():
            print(term, ":", l)
-        # with open('inverted_index.json', 'w') as j:
-        #     json.dump(self.invert_ind, j)
+           
+    def write_inverted_ind(self):
+        with open('inverted_index.json', 'w') as j:
+            json.dump(self.invert_ind, j)
 
     def write_total_docs(self):
     	with open('total_num_docs.txt', 'w') as k:
