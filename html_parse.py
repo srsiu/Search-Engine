@@ -22,7 +22,6 @@ class Tokenize:
         ''' Splits the input if its an alphanum, and removes all the extra symbols, returns a list
             Complexity: O(N) since it there is only one loop, and splitting the string and checking if its alphanum
         '''
-        pat ="[a-zA-Z0-9']+"
         return re.findall(pat,Li)
 
     def length(self,word):
