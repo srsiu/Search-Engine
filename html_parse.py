@@ -26,7 +26,6 @@ class Tokenize:
         return re.findall(pat,Li)
 
     def length(self,word):
-   		return len(self.rem(word))
         return len(self.rem(word))
 
     def make_dict(self, L: list):
@@ -125,8 +124,6 @@ class InvertedIndex:
             json.dump(self.invert_ind, j)
 
     def write_total_docs(self):
-    	with open('total_num_docs.txt', 'w') as k:
-    		k.write(str(self.num_of_documents))
         with open('total_num_docs.txt', 'w') as k:
             k.write(str(self.num_of_documents))
       
