@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import math
+import operator
 from collections import defaultdict
 
 import lxml.etree
@@ -29,7 +30,7 @@ class Retrieval:
         for term in tfidf_dict:
             for x in range(0, len(self.invert_ind[term])):
                 docID = self.invert_ind[term][x]["docID"]
-                if self.scores[docID] != 0:
+                if docID in self.scores:
                     self.scores[docID] += self.invert_ind[term][x]["tf-idf"] * \
                         tfidf_dict[term]
                 else:
@@ -40,8 +41,15 @@ class Retrieval:
             self.scores[docID] = self.scores[docID] / self.doc_l[docID]
     
     def get_top_results(self, L):
-        x = itertools.islice(L.items(), 0, 9)
-        return x
+        L = sorted(L.items(), key=lambda x: x[1], reverse=True)
+        L = dict(L)
+        
+        # for items, val in L.items():
+        #     print(items, ":", val)
+            
+        x = itertools.islice(L.items(), 0, 19)
+        for item in x:
+            print(item)
 
     def print_inverted_ind(self):
         for term, l in self.invert_ind.items():
@@ -49,6 +57,11 @@ class Retrieval:
 
     def get_doc_freq(self, word):
     	return len(self.invert_ind[word])
+ 
+    def print_scores(self):
+        print("SCORES\n")
+        for docID in self.scores:
+            print(docID, ":", self.scores[docID])
 
 
 if __name__ == '__main__':
