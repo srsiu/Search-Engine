@@ -69,7 +69,7 @@ class InvertedIndex:
                     {"docID": folder, "freq": tf[term], "html_tags":html_tags, "tf-idf": 0}]
             
     def html_parse(self):
-        tok = Tokenize();
+        tok = Tokenize()
 
         # FORMAT: { term: [ {freq: #, docID: #}, ...]}
         # Should add - html_tags: type (ex: h1, h2, h3, p)
@@ -114,10 +114,10 @@ class InvertedIndex:
     def print_inverted_ind(self):
         #for term, l in self.invert_ind.items():
         #    print(term, ":", l)
-        #with open('inverted_index.json', 'w') as j:
-        #    json.dump(self.invert_ind, j)
+        with open('inverted_index.json', 'w') as j:
+            json.dump(self.invert_ind, j)
         
-        print(len(self.invert_ind))
+        #print(len(self.invert_ind)) 569618
 
 
 """write main function"""
