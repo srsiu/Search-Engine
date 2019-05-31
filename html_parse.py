@@ -22,10 +22,10 @@ class Tokenize:
         '''
         pat ="[a-zA-Z0-9']+"
         return re.findall(pat,Li)
-   	
-    def length(self, word):
+
+    def length(self,word):
    		return len(self.rem(word))
-    
+
     def make_dict(self, L: list):
         ''' Makes a dictionary with a key of the word and value of the number of occurrences
             returns the dictionary
@@ -56,7 +56,7 @@ class InvertedIndex:
         file_path = os.path.join('.', 'WEBPAGES_RAW', 'bookkeeping.json')
         self.webpage_dict = json.load(open(file_path), encoding="utf-8")
         self.scores = dict()
-        
+
         
         '''JSON Format   "0/0" : "www.uci.edu" '''
 
@@ -77,7 +77,7 @@ class InvertedIndex:
         # FORMAT: { term: [ {freq: #, docID: #}, ...]}
         # Should add - html_tags: type (ex: h1, h2, h3, p)
 
-        i = 0
+        i = 0 # Remove after finishing testing
         for folder in self.webpage_dict:
             address = folder.split("/")
             dir = address[0] # Strings
@@ -104,7 +104,7 @@ class InvertedIndex:
                     tf = tok.term_freq(total_string)
                     self.create_index(tf, folder, self.invert_ind, html_tags)
 
-    def calculate_tf_idf(self, tf, tid, N, df):
+    def calculate_tf_idf(self, tf, tid,  N, df):
         return (tf/tid * math.log10(N / df))
         
     def calculate_all_tf_idf(self):
@@ -116,10 +116,10 @@ class InvertedIndex:
                     self.num_of_documents, len(self.invert_ind[term]))
     
     def print_inverted_ind(self):
-        #for term, l in self.invert_ind.items():
-        #    print(term, ":", l)
-        with open('inverted_index.json', 'w') as j:
-            json.dump(self.invert_ind, j)
+        for term, l in self.invert_ind.items():
+           print(term, ":", l)
+        # with open('inverted_index.json', 'w') as j:
+        #     json.dump(self.invert_ind, j)
 
     def write_total_docs(self):
     	with open('total_num_docs.txt', 'w') as k:
@@ -131,6 +131,5 @@ if __name__ == '__main__':
     sys.stdout = open("output2.txt", "w")  # OUTPUT to file called output.txt
     i = InvertedIndex() 
     i.html_parse()
-    #i.print_inverted_ind()
     i.calculate_all_tf_idf()
     i.print_inverted_ind()
