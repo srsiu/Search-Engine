@@ -36,10 +36,10 @@ def create_index(tf, folder, invert_ind):
     for term in tf:
         if term in invert_ind:
             invert_ind[term].append({"freq":tf[term], "docID":folder})
-            print("appended", term, folder)
+            #print("appended", term, folder)
         else:
             invert_ind[term] = [{"freq":tf[term], "docID":folder}]
-            print("added", term, folder)
+            #print("added", term, folder)
         
         
 
@@ -69,10 +69,11 @@ def html_parse():
                 total_string = ""
                 for p in paragraphs:
                     total_string += p.text
+                    
                 tf = term_freq(total_string)
                 create_index(tf, folder,invert_ind)
-                #for x,y in invert_ind:
-                #print(x,"\t",y)
+                with open('inverted_index.json','w') as j:
+                        json.dump(invert_ind, j)
                 
                 
                     
