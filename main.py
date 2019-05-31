@@ -12,6 +12,7 @@ if __name__ == '__main__':
             #i.print_inverted_ind()
             #i.calculate_tf_idf()
             i.print_inverted_ind()
+            crap
             break
         elif program == "query":
             usr_in = input("Enter Query: ")
