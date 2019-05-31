@@ -126,6 +126,7 @@ class InvertedIndex:
     def write_total_docs(self):
     	with open('total_num_docs.txt', 'w') as k:
     		k.write(str(self.num_of_documents))
+            k.write(str(self.num_of_documents))
       
     def write_doc_length(self):
         with open('doc_length.json', 'w') as d:
