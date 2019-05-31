@@ -106,6 +106,7 @@ class InvertedIndex:
 
     def calculate_tf_idf(self, tf, tid,  N, df):
         return (tf/tid * math.log10(N / df))
+
         
     def calculate_all_tf_idf(self):
         for term in self.invert_ind:
@@ -114,6 +115,7 @@ class InvertedIndex:
                 self.invert_ind[term][x]["tf-idf"] = self.calculate_tf_idf(
                     self.invert_ind[term][x]["freq"], self.doc_length[self.invert_ind[term][x]["docID"]],
                     self.num_of_documents, len(self.invert_ind[term]))
+
     
     def print_inverted_ind(self):
         for term, l in self.invert_ind.items():
@@ -124,7 +126,6 @@ class InvertedIndex:
     def write_total_docs(self):
     	with open('total_num_docs.txt', 'w') as k:
     		k.write(self.num_of_documents)
-
 
 """write main function"""
 if __name__ == '__main__':

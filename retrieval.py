@@ -12,7 +12,7 @@ from nltk.corpus import stopwords
 
 import html_parse
 import itertools
-
+import Query
 
 class Retrieval:
     def __init__(self):
