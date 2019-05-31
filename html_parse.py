@@ -55,6 +55,7 @@ class InvertedIndex:
         self.doc_length = dict()
         file_path = os.path.join('.', 'WEBPAGES_RAW', 'bookkeeping.json')
         self.webpage_dict = json.load(open(file_path), encoding="utf-8")
+        self.scores = dict()
         
         
         '''JSON Format   "0/0" : "www.uci.edu" '''
@@ -102,7 +103,7 @@ class InvertedIndex:
                     self.doc_length[folder] = tok.length(total_string)
                     tf = tok.term_freq(total_string)
                     self.create_index(tf, folder, self.invert_ind, html_tags)
-            
+
     def calculate_tf_idf(self, tf, tid, N, df):
         return (tf/tid * math.log10(N / df))
         
@@ -119,8 +120,10 @@ class InvertedIndex:
         #    print(term, ":", l)
         with open('inverted_index.json', 'w') as j:
             json.dump(self.invert_ind, j)
-    
-        
+
+    def write_total_docs(self):
+    	with open('total_num_docs.txt', 'w') as k:
+    		k.write(self.num_of_documents)
 
 
 """write main function"""
@@ -131,4 +134,3 @@ if __name__ == '__main__':
     #i.print_inverted_ind()
     i.calculate_all_tf_idf()
     i.print_inverted_ind()
-    
