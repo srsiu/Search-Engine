@@ -14,8 +14,9 @@ if __name__ == '__main__':
             i.print_inverted_ind()
             break
         elif program == "query":
-            query = input("Enter Query: ")
-            print(query)
+            usr_in = input("Enter Query: ")
+            query = Query.Query(usr_in)
+            query.run_query()
             break
         else:
             program = input("Invalid response! Would your like to run the index or the query")

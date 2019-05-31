@@ -11,7 +11,6 @@ import lxml.html
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 
-import corpus
 
 
 
@@ -63,26 +62,17 @@ class InvertedIndex:
     def create_index(self, tf, folder, invert_ind, html_tags):
         for term in tf:
             if term in invert_ind:
-                invert_ind[term].append(
-                    {"docID": folder, "freq": tf[term], "html_tags": html_tags, 
-                     "tf-idf": 0, "score": 0})
+                invert_ind[term].append({"freq":tf[term], "docID":folder, "metadata":metadata, "tf-idf":0 })
             else:
-                invert_ind[term] = [
-                    {"docID": folder, "freq": tf[term], "html_tags":html_tags, 
-                     "tf-idf": 0, "score": 0}]
+                invert_ind[term] = [{"freq": tf[term], "docID":folder, "metadata":metadata, "tf-idf":0}]
             
     def html_parse(self):
-        
-        '''docs is a list of set of words in each doc'''
-        docs = list()
-        '''dictionary intialization'''
-        
         tok = Tokenize();
 
         # FORMAT: { term: [ {freq: #, docID: #}, ...]}
         # Should add - html_tags: type (ex: h1, h2, h3, p)
 
-        i = 0
+        i = 0 # Remove after finishing testing
         for folder in self.webpage_dict:
             address = folder.split("/")
             dir = address[0] # Strings
@@ -90,7 +80,7 @@ class InvertedIndex:
             
             file_name = os.path.join(".", "WEBPAGES_RAW", dir, file)
 
-            print("FILE:", file_name, "|", file, "|", dir)
+            #print("FILE:", file_name, "|", file, "|", dir)
             
             i += 1
             if i > 12:
@@ -107,8 +97,6 @@ class InvertedIndex:
                         total_string += p.text
                     tf = tok.term_freq(total_string)
                     self.create_index(tf, folder, self.invert_ind, html_tags)
-                    #for x,y in invert_ind:
-                    #print(x,"\t",y)
             
     def calculate_tf_idf(self, tf, N, df):
         return (1 + math.log10(tf) * math.log10(N / df))
@@ -127,8 +115,6 @@ class InvertedIndex:
         with open('inverted_index.json', 'w') as j:
             json.dump(self.invert_ind, j)
 
-        
-
 
 """write main function"""
 if __name__ == '__main__':
@@ -138,4 +124,4 @@ if __name__ == '__main__':
     #i.print_inverted_ind()
     i.calculate_all_tf_idf()
     i.print_inverted_ind()
-    
+
