@@ -17,6 +17,7 @@ import Query
 class Retrieval:
     def __init__(self):
         self.scores = dict()
+        self.doc_l = json.load(open("doc_length.json"), encoding="utf-8")
         self.invert_ind = json.load(open("inverted_index.json"), encoding="utf-8")
 
         with open('total_num_docs.txt', 'r') as doc:
@@ -28,7 +29,7 @@ class Retrieval:
         for term in self.invert_ind:
             for x in range(0, len(self.invert_ind[term])):
                 self.scores[term] = (self.invert_ind[term][x]["tf-idf"] *
-                                     query_tf_idf) / len(self.invert_ind[term][x])
+                                     query_tf_idf) / self.doc_l[self.invert_ind[term][x]["docID"]]
         
     
     def get_top_results(self, L):
@@ -48,3 +49,5 @@ if __name__ == '__main__':
     sys.stdout = open("retrieval_out.txt", "w")  # OUTPUT to file called output.txt
     i = Retrieval()
     i.print_inverted_ind()
+    
+
