@@ -38,7 +38,7 @@ class Query:
 		#self.retr_info.print_scores()
 
 	def calc_td_idf(self, word):
-		tf = self.term_f[word] / len(self.tokens)
+		tf = self.term_f[word]
 		idf = math.log10(self.retr_info.total_docs / self.retr_info.get_doc_freq(word))
 
 		tf_idf = tf * idf

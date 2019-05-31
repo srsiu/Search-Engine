@@ -8,6 +8,8 @@ from collections import defaultdict
 import lxml.etree
 import lxml.html
 from bs4 import BeautifulSoup
+import nltk
+#nltk.download('punkt')
 from nltk.corpus import stopwords
 
 
@@ -33,6 +35,7 @@ class Tokenize:
         '''
         d = {}
         for word in L:
+            word = word.lower()
             if word not in self.stop_words:
                 if word not in d:
                     d[word]=1
@@ -102,7 +105,7 @@ class InvertedIndex:
                     self.create_index(tf, folder, self.invert_ind, html_tags)
 
     def calculate_tf_idf(self, tf, tid,  N, df):
-        return (tf/tid * math.log10(N / df))
+        return (1+ math.log10(tf) * math.log10(N / df))
 
     def calculate_all_tf_idf(self):
         for term in self.invert_ind:
