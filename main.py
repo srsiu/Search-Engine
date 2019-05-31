@@ -13,6 +13,7 @@ if __name__ == '__main__':
             #i.print_inverted_ind()
             i.write_inverted_ind()
             i.write_total_docs()
+            i.write_doc_length()
             
             break
         elif program == "query":
