@@ -11,6 +11,7 @@ import lxml.html
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 
+import corpus
 
 
 
@@ -26,7 +27,8 @@ class Tokenize:
         '''
         pat ="[a-zA-Z0-9']+"
         return re.findall(pat,Li)
-
+   	#def length(word):
+   		#return len(rem(word))
     def make_dict(self, L: list):
         ''' Makes a dictionary with a key of the word and value of the number of occurrences
             returns the dictionary
@@ -53,6 +55,7 @@ class InvertedIndex:
     def __init__(self):
         self.num_of_documents = 0
         self.invert_ind = dict([])
+        #self.doc_length = dict()
         file_path = os.path.join('.', 'WEBPAGES_RAW', 'bookkeeping.json')
         self.webpage_dict = json.load(open(file_path), encoding="utf-8")
         
@@ -62,17 +65,13 @@ class InvertedIndex:
     def create_index(self, tf, folder, invert_ind, metadata):
         for term in tf:
             if term in invert_ind:
-                invert_ind[term].append({"freq":tf[term], "docID":folder, "metadata":metadata, "tf-idf":0 })
-                #print("appended", term, folder)
+                invert_ind[term].append(
+                    {"docID": folder, "freq": tf[term], "metadata": metadata, "tf-idf": 0})
             else:
-                invert_ind[term] = [{"freq": tf[term], "docID":folder, "metadata":metadata, "tf-idf":0}]
-                #print("added", term, folder)
+                invert_ind[term] = [
+                    {"docID": folder, "freq": tf[term], "metadata":metadata, "tf-idf":0}]
             
     def html_parse(self):
-
-        corpus_all = corpus.Corpus()
-        '''for m in corpus_all.url_file_map:
-            print(m)'''
         
         '''docs is a list of set of words in each doc'''
         docs = list()
@@ -91,7 +90,7 @@ class InvertedIndex:
             
             file_name = os.path.join(".", "WEBPAGES_RAW", dir, file)
 
-            #print("FILE:", file_name, "|", file, "|", dir)
+            print("FILE:", file_name, "|", file, "|", dir)
             
             i += 1
             if i > 12:
@@ -106,6 +105,7 @@ class InvertedIndex:
                     total_string = ""
                     for p in paragraphs:
                         total_string += p.text
+                    #self.doc_length[folder] = tok.length(total_string)
                     tf = tok.term_freq(total_string)
                     self.create_index(tf, folder, self.invert_ind, metadata)
                     #for x,y in invert_ind:
@@ -114,12 +114,17 @@ class InvertedIndex:
                     
     def calculate_tf_idf(self):
         for term in self.invert_ind:
-            self.invert_ind["tf-idf"] = (1 + math.log10(self.invert_ind[term]["freq"])) * \
-                math.log10(self.num_of_documents / len(self.invert_ind[term]))    
+            for x in range(0, len(self.invert_ind[term])):
+                #print("doc: ", doc["docID"], " ", self.invert_ind[term][0]["tf-idf"])
+                self.invert_ind[term][x]["tf-idf"] = (1 + \
+                    math.log10(self.invert_ind[term][x]["freq"])) * \
+                    math.log10(self.num_of_documents / len(self.invert_ind[term]))    
     
-    def print_inverted_ind(self):
-        for term, l in self.invert_ind.items():
-            print(term, ":", l)
+   	def print_inverted_ind(self):
+        #for term, l in self.invert_ind.items():
+        #    print(term, ":", l)
+        with open('inverted_index.json', 'w') as j:
+            json.dump(self.invert_ind, j)
         
 
 
@@ -129,5 +134,6 @@ if __name__ == '__main__':
     i = InvertedIndex() 
     i.html_parse()
     #i.print_inverted_ind()
-    #i.calculate_tf_idf()
+    i.calculate_tf_idf()
     i.print_inverted_ind()
+    
