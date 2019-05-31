@@ -33,8 +33,9 @@ class Query:
 		self.calc_all_tdidf()
 		self.retr_info.calculate_cosine(self.tfidf_dict)
 		sys.stdout = open("query_results.txt", "w")
-		self.retr_info.get_top_results(self.retr_info.scores)
+		self.retr_info.get_top_results()
 		#self.retr_info.print_scores()
+		self.retr_info.get_top_web_results()
 
 	def calc_td_idf(self, word):
 		tf = self.term_f[word] / len(self.tokens)
