@@ -11,6 +11,7 @@ if __name__ == '__main__':
             i.html_parse()
             #i.print_inverted_ind()
             #i.calculate_tf_idf()
+            i.calculate_all_tf_idf()
             i.print_inverted_ind()
             break
         elif program == "query":
