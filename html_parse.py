@@ -63,10 +63,10 @@ class InvertedIndex:
         for term in tf:
             if term in invert_ind:
                 invert_ind[term].append(
-                    {"freq": tf[term], "docID": folder, "html_tags": html_tags, "tf-idf": 0})
+                    {"docID": folder, "freq": tf[term], "html_tags": html_tags, "tf-idf": 0})
             else:
                 invert_ind[term] = [
-                    {"freq": tf[term], "docID":folder, "html_tags":html_tags, "tf-idf":0}]
+                    {"docID": folder, "freq": tf[term], "html_tags":html_tags, "tf-idf": 0}]
             
     def html_parse(self):
         tok = Tokenize();
@@ -84,7 +84,7 @@ class InvertedIndex:
 
             #print("FILE:", file_name, "|", file, "|", dir)
             
-            i += 1
+            # i += 1
             #if i > 12:
             #    break
             if file_name != None:
@@ -114,8 +114,10 @@ class InvertedIndex:
     def print_inverted_ind(self):
         #for term, l in self.invert_ind.items():
         #    print(term, ":", l)
-        with open('inverted_index.json', 'w') as j:
-            json.dump(self.invert_ind, j)
+        #with open('inverted_index.json', 'w') as j:
+        #    json.dump(self.invert_ind, j)
+        
+        print(len(self.invert_ind))
 
 
 """write main function"""

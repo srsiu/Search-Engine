@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import math
+import itertools
 from collections import defaultdict
 from urllib.parse import urlparse
 
@@ -11,7 +12,6 @@ import lxml.html
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 
-import corpus
 import html_parse
 import Query
 
