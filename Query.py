@@ -2,6 +2,9 @@ import nltk
 import re
 import retrieval
 import math
+import sys
+
+#nltk.download('punkt')
 
 class Query:
 	def __init__(self, query):
@@ -27,9 +30,12 @@ class Query:
 	def run_query(self):
 		self.create_tokens()
 		self.get_freq()
-
-		#for w in self.term_f:
-		#	print(w, self.term_f[w])
+		self.calc_all_tdidf()
+		self.retr_info.calculate_cosine(self.tfidf_dict)
+  
+		sys.stdout = open("query_results.txt", "w")
+		self.retr_info.get_top_results(self.retr_info.scores)
+		#self.retr_info.print_scores()
 
 	def calc_td_idf(self, word):
 		tf = self.term_f[word] / len(self.tokens)
