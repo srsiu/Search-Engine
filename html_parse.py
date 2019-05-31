@@ -11,7 +11,6 @@ import lxml.html
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 
-import corpus
 
 
 
@@ -63,13 +62,17 @@ class InvertedIndex:
     def create_index(self, tf, folder, invert_ind, metadata):
         for term in tf:
             if term in invert_ind:
-                invert_ind[term].append(
-                    {"docID": folder, "freq": tf[term], "metadata": metadata, "tf-idf": 0})
+                invert_ind[term].append({"freq":tf[term], "docID":folder, "metadata":metadata, "tf-idf":0 })
+                #print("appended", term, folder)
             else:
-                invert_ind[term] = [
-                    {"docID": folder, "freq": tf[term], "metadata":metadata, "tf-idf":0}]
+                invert_ind[term] = [{"freq": tf[term], "docID":folder, "metadata":metadata, "tf-idf":0}]
+                #print("added", term, folder)
             
     def html_parse(self):
+
+        corpus_all = corpus.Corpus()
+        '''for m in corpus_all.url_file_map:
+            print(m)'''
         
         '''docs is a list of set of words in each doc'''
         docs = list()
@@ -88,7 +91,7 @@ class InvertedIndex:
             
             file_name = os.path.join(".", "WEBPAGES_RAW", dir, file)
 
-            print("FILE:", file_name, "|", file, "|", dir)
+            #print("FILE:", file_name, "|", file, "|", dir)
             
             i += 1
             if i > 12:
@@ -111,11 +114,8 @@ class InvertedIndex:
                     
     def calculate_tf_idf(self):
         for term in self.invert_ind:
-            for x in range(0, len(self.invert_ind[term])):
-                #print("doc: ", doc["docID"], " ", self.invert_ind[term][0]["tf-idf"])
-                self.invert_ind[term][x]["tf-idf"] = (1 + \
-                    math.log10(self.invert_ind[term][x]["freq"])) * \
-                    math.log10(self.num_of_documents / len(self.invert_ind[term]))    
+            self.invert_ind["tf-idf"] = (1 + math.log10(self.invert_ind[term]["freq"])) * \
+                math.log10(self.num_of_documents / len(self.invert_ind[term]))    
     
     def print_inverted_ind(self):
         for term, l in self.invert_ind.items():
@@ -129,6 +129,5 @@ if __name__ == '__main__':
     i = InvertedIndex() 
     i.html_parse()
     #i.print_inverted_ind()
-    i.calculate_tf_idf()
+    #i.calculate_tf_idf()
     i.print_inverted_ind()
-    
