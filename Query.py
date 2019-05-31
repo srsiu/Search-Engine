@@ -27,6 +27,8 @@ class Query:
 	def run_query(self):
 		self.create_tokens()
 		self.get_freq()
+		self.calc_all_tdidf()
+		self.retr_info.calculate_cosine(self.tfidf_dict)
 
 		#for w in self.term_f:
 		#	print(w, self.term_f[w])
