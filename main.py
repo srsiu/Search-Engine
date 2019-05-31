@@ -9,10 +9,11 @@ if __name__ == '__main__':
             sys.stdout = open("output2.txt", "w")  # OUTPUT to file called output.txt
             i = html_parse.InvertedIndex() 
             i.html_parse()
+            i.calculate_all_tf_idf()
             #i.print_inverted_ind()
-            #i.calculate_tf_idf()
-            i.print_inverted_ind()
-            crap
+            i.write_inverted_ind()
+            i.write_total_docs()
+            i.write_doc_length()
             break
         elif program == "query":
             usr_in = input("Enter Query: ")
