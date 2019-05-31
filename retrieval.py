@@ -39,6 +39,9 @@ class Retrieval:
         for docID in self.scores:
             self.scores[docID] = self.scores[docID] / self.doc_l[docID]
 
+    def calculate_all_cosine(self,query):
+        for word in query.tokens:
+            calculate_cosine(query.tfidf_dict[word])
     
     def get_top_results(self, L):
         x = itertools.islice(L.items(), 0, 9)
@@ -56,5 +59,3 @@ if __name__ == '__main__':
     sys.stdout = open("retrieval_out.txt", "w")  # OUTPUT to file called output.txt
     i = Retrieval()
     i.print_inverted_ind()
-    
-
