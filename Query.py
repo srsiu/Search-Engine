@@ -9,7 +9,7 @@ class Query:
 
 	def create_tokens(self):
 		self.query.strip()
-		self.query.lower()
+		self.query = self.query.lower()
 		self.query = re.sub(r'[^a-zA-Z0-9 ]+', '', self.query)
 		self.tokens = nltk.word_tokenize(self.query)
 
@@ -24,6 +24,6 @@ class Query:
 		self.create_tokens()
 		self.get_freq()
 
-		for w in self.term_f:
-			print(w)
+		#for w in self.term_f:
+		#	print(w, self.term_f[w])
 
