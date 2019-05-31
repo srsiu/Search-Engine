@@ -62,9 +62,11 @@ class InvertedIndex:
     def create_index(self, tf, folder, invert_ind, html_tags):
         for term in tf:
             if term in invert_ind:
-                invert_ind[term].append({"freq":tf[term], "docID":folder, "metadata":metadata, "tf-idf":0 })
+                invert_ind[term].append(
+                    {"freq": tf[term], "docID": folder, "html_tags": html_tags, "tf-idf": 0})
             else:
-                invert_ind[term] = [{"freq": tf[term], "docID":folder, "metadata":metadata, "tf-idf":0}]
+                invert_ind[term] = [
+                    {"freq": tf[term], "docID":folder, "html_tags":html_tags, "tf-idf":0}]
             
     def html_parse(self):
         tok = Tokenize();
@@ -83,8 +85,8 @@ class InvertedIndex:
             #print("FILE:", file_name, "|", file, "|", dir)
             
             i += 1
-            if i > 12:
-                break
+            #if i > 12:
+            #    break
             if file_name != None:
                 
                 self.num_of_documents += 1
