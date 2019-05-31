@@ -4,15 +4,11 @@ import re
 import sys
 import math
 from collections import defaultdict
-from urllib.parse import urlparse
 
 import lxml.etree
 import lxml.html
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
-
-
-
 
 
 ### TOKENIZING ###
@@ -26,6 +22,9 @@ class Tokenize:
         '''
         pat ="[a-zA-Z0-9']+"
         return re.findall(pat,Li)
+
+    def length(self,word):
+   		return len(self.rem(word))
 
     def make_dict(self, L: list):
         ''' Makes a dictionary with a key of the word and value of the number of occurrences
@@ -53,20 +52,22 @@ class InvertedIndex:
     def __init__(self):
         self.num_of_documents = 0
         self.invert_ind = dict([])
+        self.doc_length = dict()
         file_path = os.path.join('.', 'WEBPAGES_RAW', 'bookkeeping.json')
         self.webpage_dict = json.load(open(file_path), encoding="utf-8")
         self.scores = dict()
-        
         '''JSON Format   "0/0" : "www.uci.edu" '''
 
     def create_index(self, tf, folder, invert_ind, html_tags):
         for term in tf:
             if term in invert_ind:
                 invert_ind[term].append(
-                    {"docID": folder, "freq": tf[term], "html_tags": html_tags, "tf-idf": 0})
+                    {"docID": folder, "freq": tf[term], "html_tags": html_tags, 
+                     "tf-idf": 0})
             else:
                 invert_ind[term] = [
-                    {"docID": folder, "freq": tf[term], "html_tags":html_tags, "tf-idf": 0}]
+                    {"docID": folder, "freq": tf[term], "html_tags":html_tags, 
+                     "tf-idf": 0}]
             
     def html_parse(self):
         tok = Tokenize()
@@ -82,8 +83,6 @@ class InvertedIndex:
             
             file_name = os.path.join(".", "WEBPAGES_RAW", dir, file)
 
-            #print("FILE:", file_name, "|", file, "|", dir)
-            
             # i += 1
             #if i > 12:
             #    break
@@ -97,35 +96,41 @@ class InvertedIndex:
                     total_string = ""
                     for p in paragraphs:
                         total_string += p.text
+                    self.doc_length[folder] = tok.length(total_string)
                     tf = tok.term_freq(total_string)
                     self.create_index(tf, folder, self.invert_ind, html_tags)
-            
-    def calculate_tf_idf(self, tf, N, df):
-        return (1 + math.log10(tf) * math.log10(N / df))
+
+    def calculate_tf_idf(self, tf, tid,  N, df):
+        return (tf/tid * math.log10(N / df))
+
         
     def calculate_all_tf_idf(self):
         for term in self.invert_ind:
             for x in range(0, len(self.invert_ind[term])):
                 #print("doc: ", doc["docID"], " ", self.invert_ind[term][0]["tf-idf"])
                 self.invert_ind[term][x]["tf-idf"] = self.calculate_tf_idf(
-                    self.invert_ind[term][x]["freq"], self.num_of_documents,
-                    len(self.invert_ind[term]))
+                    self.invert_ind[term][x]["freq"], self.doc_length[self.invert_ind[term][x]["docID"]],
+                    self.num_of_documents, len(self.invert_ind[term]))
+
     
     def print_inverted_ind(self):
-        #for term, l in self.invert_ind.items():
-        #    print(term, ":", l)
+        for term, l in self.invert_ind.items():
+           print(term, ":", l)
+           
+    def write_inverted_ind(self):
         with open('inverted_index.json', 'w') as j:
             json.dump(self.invert_ind, j)
         
         #print(len(self.invert_ind)) 569618
 
+    def write_total_docs(self):
+    	with open('total_num_docs.txt', 'w') as k:
+    		k.write(self.num_of_documents)
 
 """write main function"""
 if __name__ == '__main__':
     sys.stdout = open("output2.txt", "w")  # OUTPUT to file called output.txt
     i = InvertedIndex() 
     i.html_parse()
-    #i.print_inverted_ind()
     i.calculate_all_tf_idf()
     i.print_inverted_ind()
-
