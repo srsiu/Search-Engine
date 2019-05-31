@@ -114,12 +114,18 @@ class InvertedIndex:
                     self.invert_ind[term][x]["freq"],self.doc_length[self.invert_ind[term][x]["docID"]], self.num_of_documents,
                     len(self.invert_ind[term]))
     
-    def print_inverted_ind(self):
-        for term, l in self.invert_ind.items():
-           print(term, ":", l)
+    # def print_inverted_ind(self):
+        # for term, l in self.invert_ind.items():
+        #    print(term, ":", l)
         #print(len(self.invert_ind))
         #with open('inverted_index2.json', 'w') as j:
-        #    j.write(json.dumps(self.invert_ind) + "/n")
+        #    json.dump(self.invert_ind,j)
+    def print_doc_l(self):
+        # for term, l in self.invert_ind.items():
+        #    print(term, ":", l)
+        #print(len(self.invert_ind))
+        with open('doc_length.json', 'w') as j:
+           json.dump(self.doc_length,j)
 
 
 """write main function"""
