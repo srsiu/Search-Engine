@@ -20,6 +20,8 @@ class Retrieval:
         self.scores = dict() # {docID: score}
         self.doc_l = json.load(open("doc_length.json"), encoding="utf-8")
         self.invert_ind = json.load(open("inverted_index.json"), encoding="utf-8")
+        file_path = os.path.join('.', 'WEBPAGES_RAW', 'bookkeeping.json')
+        self.webpage_dict = json.load(open(file_path), encoding="utf-8")
 
         with open('total_num_docs.txt', 'r') as doc:
         	self.total_docs = int(doc.read())
@@ -40,14 +42,11 @@ class Retrieval:
         for docID in self.scores:
             self.scores[docID] = self.scores[docID] / self.doc_l[docID]
     
-    def get_top_results(self, L):
-        L = sorted(L.items(), key=lambda x: x[1], reverse=True)
-        L = dict(L)
+    def get_top_results(self):
+        sorted_list = sorted(self.scores.items(), key=lambda x: x[1], reverse=True)
+        sorted_dict = dict(sorted_list)
         
-        # for items, val in L.items():
-        #     print(items, ":", val)
-            
-        x = itertools.islice(L.items(), 0, 19)
+        x = itertools.islice(sorted_dict.items(), 0, 19)
         for item in x:
             print(item)
 
@@ -62,6 +61,14 @@ class Retrieval:
         print("SCORES\n")
         for docID in self.scores:
             print(docID, ":", self.scores[docID])
+            
+    def get_top_web_results(self):
+        i = 0
+        for docID in self.scores:
+            print(self.webpage_dict[docID])
+            i += 1
+            if i > 10:
+                break
 
 
 if __name__ == '__main__':
