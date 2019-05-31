@@ -67,7 +67,7 @@ class Retrieval:
         for docID in self.scores:
             print(self.webpage_dict[docID])
             i += 1
-            if i > 10:
+            if i > 20:
                 break
 
 
