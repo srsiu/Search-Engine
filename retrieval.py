@@ -4,15 +4,14 @@ import re
 import sys
 import math
 from collections import defaultdict
-from urllib.parse import urlparse
 
 import lxml.etree
 import lxml.html
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 
-import corpus
 import html_parse
+import itertools
 
 
 class Retrieval:
@@ -24,9 +23,13 @@ class Retrieval:
 
         for term in self.invert_ind:
             for x in range(0, len(self.invert_ind[term])):
-                self.scores[term] = (self.invert_ind[term][x]["tf-idf"] +
+                self.scores[term] = (self.invert_ind[term][x]["tf-idf"] *
                                      query_tf_idf) / len(self.invert_ind[term][x])
         #return sorted(self.invert_ind.items(), key=lambda x:)
+    
+    def get_top_results(self, L):
+        x = itertools.islice(L.items(), 0, 9)
+        return x
 
     def print_inverted_ind(self):
         for term, l in self.invert_ind.items():
