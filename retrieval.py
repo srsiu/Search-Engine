@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import math
+import operator
 from collections import defaultdict
 
 import lxml.etree
@@ -40,8 +41,14 @@ class Retrieval:
             self.scores[docID] = self.scores[docID] / self.doc_l[docID]
     
     def get_top_results(self, L):
-        list = itertools.islice(L.items(), 0, 9)
-        for item in list:
+        L = sorted(L.items(), key=lambda x: x[1], reverse=True)
+        L = dict(L)
+        
+        # for items, val in L.items():
+        #     print(items, ":", val)
+            
+        x = itertools.islice(L.items(), 0, 19)
+        for item in x:
             print(item)
 
     def print_inverted_ind(self):
