@@ -27,6 +27,7 @@ class Tokenize:
 
     def length(self,word):
    		return len(self.rem(word))
+        return len(self.rem(word))
 
     def make_dict(self, L: list):
         ''' Makes a dictionary with a key of the word and value of the number of occurrences
@@ -126,6 +127,7 @@ class InvertedIndex:
     def write_total_docs(self):
     	with open('total_num_docs.txt', 'w') as k:
     		k.write(str(self.num_of_documents))
+        with open('total_num_docs.txt', 'w') as k:
             k.write(str(self.num_of_documents))
       
     def write_doc_length(self):
