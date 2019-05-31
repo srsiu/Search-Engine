@@ -6,15 +6,14 @@ if __name__ == '__main__':
     program = input("Would you like to run the index or the query? ")
     while True:
         if program == "index":
-            
-            # OUTPUT to file called output.txt
-            sys.stdout = open("output2.txt", "w")
-            i = html_parse.InvertedIndex()
+            sys.stdout = open("output2.txt", "w")  # OUTPUT to file called output.txt
+            i = html_parse.InvertedIndex() 
             i.html_parse()
-            #i.print_inverted_ind()
-            #i.calculate_tf_idf()
             i.calculate_all_tf_idf()
-            i.print_inverted_ind()
+            #i.print_inverted_ind()
+            i.write_inverted_ind()
+            i.write_total_docs()
+            
             break
         elif program == "query":
             usr_in = input("Enter Query: ")
@@ -22,7 +21,7 @@ if __name__ == '__main__':
             query.run_query()
             break
         else:
-            program = input(
-                "Invalid response! Would your like to run the index or the query")
+            program = input("Invalid response! Would your like to run the index or the query")
             continue
+    
     
