@@ -21,14 +21,18 @@ class Retrieval:
     def __init__(self):
         self.scores = dict()
         self.invert_ind = json.load(open("inverted_index.json"), encoding="utf-8")
-        
+        self.doc_l = json.load(open("doc_length.json"), encoding="utf-8")
+        self.new_dict = dict{}   
     def calculate_cosine(self, query_tf_idf):
-
         for term in self.invert_ind:
             for x in range(0, len(self.invert_ind[term])):
-                self.scores[term] = (self.invert_ind[term][x]["tf-idf"] +
-                                     query_tf_idf) / len(self.invert_ind[term][x])
-        return sorted(self.invert_ind.items(), key=lambda x:)
+                self.scores[term] = (self.invert_ind[term][x]["tf-idf"] *
+                                     query_tf_idf) / doc_l[invert_ind[term][x]["docID"]]
+       self.new_dict = sorted(self.invert_ind.items(), key=lambda x:)
+    def do_all(self,query):
+        for word in query.tokens:
+            calculate_cosine(query.tfidf_dict[word])
+        return 
     def get_top_results(self, L):
         x = itertools.islice(L.items(), 0, 9)
         return x
