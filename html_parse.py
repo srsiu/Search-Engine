@@ -58,16 +58,27 @@ class InvertedIndex:
         self.scores = dict()
         '''JSON Format   "0/0" : "www.uci.edu" '''
 
-    def create_index(self, tf, folder, invert_ind, html_tags):
+    def create_index(self, tf, hd, bd, tt, folder, invert_ind):
         for term in tf:
             if term in invert_ind:
-                invert_ind[term].append(
-                    {"docID": folder, "freq": tf[term], "html_tags": html_tags, 
-                     "tf-idf": 0})
+                if term in hd or term in bd or term in tt:
+                    invert_ind[term].append(
+                        {"docID": folder, "freq": tf[term], "html_tags":1, 
+                         "tf-idf": 0})
+                else:
+                    invert_ind[term].append(
+                        {"docID": folder, "freq": tf[term], "html_tags":0, 
+                         "tf-idf": 0})
             else:
-                invert_ind[term] = [
-                    {"docID": folder, "freq": tf[term], "html_tags":html_tags, 
-                     "tf-idf": 0}]
+                if term in hd or term in bd or term in tt:
+                    invert_ind[term] = [
+                        {"docID": folder, "freq": tf[term], "html_tags":1, 
+                         "tf-idf": 0}]
+                else:
+                    invert_ind[term] = [
+                        {"docID": folder, "freq": tf[term], "html_tags":0, 
+                         "tf-idf": 0}]
+
             
     def html_parse(self):
         tok = Tokenize()
@@ -90,16 +101,38 @@ class InvertedIndex:
             if file_name != None:
                 
                 self.num_of_documents += 1
-                html_tags = "p"
+                p_tags = "p"
+                h_tags = re.compile('^h[1-6]$')
+                b_tags = "b"
+                t_tags = "title"
                 with open(file_name, "r", encoding="utf8") as html_doc:
                     soup = BeautifulSoup(html_doc, "lxml")
-                    paragraphs = soup.find_all(html_tags)
+                    paragraphs = soup.find_all(p_tags)
                     total_string = ""
                     for p in paragraphs:
                         total_string += p.text
                     self.doc_length[folder] = tok.length(total_string)
                     tf = tok.term_freq(total_string)
-                    self.create_index(tf, folder, self.invert_ind, html_tags)
+
+                    headers = soup.find_all(h_tags)
+                    header_string = ""
+                    for h in headers:
+                        header_string += h.text
+                    hd = tok.term_freq(header_string)
+
+                    bold = soup.find_all(b_tags)
+                    bold_string = ""
+                    for b in bold:
+                        bold_string += b.text
+                    bd = tok.term_freq(bold_string)
+
+                    title = soup.find_all("title")
+                    title_string = ""
+                    for t in title:
+                        title_string += t.text
+                    tt = tok.term_freq(title_string)
+
+                    self.create_index(tf, hd, bd, tt, folder, self.invert_ind)
 
     def calculate_tf_idf(self, tf, tid,  N, df):
         return (tf/tid * math.log10(N / df))
