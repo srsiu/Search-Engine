@@ -36,7 +36,6 @@ class Query:
 		self.get_freq()
 		self.calc_all_tdidf()
 		self.retr_info.calculate_cosine(self.tfidf_dict)
-  
 		sys.stdout = open("query_results.txt", "w")
 		self.retr_info.get_top_results()
 		self.retr_info.get_top_web_results()
