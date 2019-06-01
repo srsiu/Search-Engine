@@ -72,7 +72,7 @@ class Retrieval:
         for docID in self.scores:
             top_results.append(self.webpage_dict[docID])
             i += 1
-            if i > 20:
+            if i > 19:
                 break
         return top_results
 
