@@ -5,7 +5,7 @@ import math
 import sys
 from nltk.stem import WordNetLemmatizer
 #nltk.download('punkt')
-nltk.download('wordnet')
+# nltk.download('wordnet')
 
 class Query:
 	def __init__(self, query):
@@ -14,8 +14,8 @@ class Query:
 		self.tokens = [] # list of tokens from string 
 		self.retr_info = retrieval.Retrieval()
 		self.tfidf_dict = {} # {term: tfidf}
-  		self.lemm = WordNetLemmatizer()
-
+		self.lemm = WordNetLemmatizer()
+    
 	def create_tokens(self):
 		self.query.strip()
 		self.query = self.query.lower()

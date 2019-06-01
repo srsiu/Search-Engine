@@ -63,7 +63,7 @@ class Retrieval:
         for docID in self.scores:
             print(docID, ":", self.scores[docID])
             
-    def get_top_web_results(self):
+    def print_top_web_results(self):
         length = 0
         for docID in self.scores:
             if self.scores[docID] != 0:
@@ -76,7 +76,16 @@ class Retrieval:
             if i > 21:
                 break
 
-
+    def get_top_web_results(self):
+        i = 1
+        l = list()
+        for docID in self.scores:            
+            l.append(self.webpage_dict[docID])
+            i += 1
+            if i > 20:
+                break
+        return l
+                
 if __name__ == '__main__':
     sys.stdout = open("retrieval_out.txt", "w")  # OUTPUT to file called output.txt
     i = Retrieval()

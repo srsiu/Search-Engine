@@ -62,14 +62,11 @@ class GUI:
         self.query_type.grid(row=1, column=2)
        
 
-        
-
-        
     def get_search_input(self):
         return self.search_input
     
     def start_search(self):
-        print(self.type.get())
+        # print(self.type.get())
         if self.type.get() == 1:
             self.top_results.delete(1.0, END)
             # OUTPUT to file called output.txt
