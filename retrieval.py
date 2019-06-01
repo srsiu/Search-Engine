@@ -46,7 +46,7 @@ class Retrieval:
         sorted_list = sorted(self.scores.items(), key=lambda x: x[1], reverse=True)
         sorted_dict = dict(sorted_list)
         
-        x = itertools.islice(sorted_dict.items(), 0, 19)
+        x = itertools.islice(sorted_dict.items(), 0, 20)
         for item in x:
             print(item)
 
