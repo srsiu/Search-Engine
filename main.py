@@ -23,5 +23,10 @@ if __name__ == '__main__':
         else:
             program = input("Invalid response! Would your like to run the index or the query")
             continue
+        
+    # g = GUI()
+    # g.run()
     
+
+
     

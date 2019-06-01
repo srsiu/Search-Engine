@@ -31,16 +31,6 @@ class Query:
 			else:
 				self.term_f[word] = 1
 
-	def run_query(self):
-		self.create_tokens()
-		self.get_freq()
-		self.calc_all_tdidf()
-		self.retr_info.calculate_cosine(self.tfidf_dict)
-		sys.stdout = open("query_results.txt", "w")
-		self.retr_info.get_top_results()
-		self.retr_info.get_top_web_results()
-		#self.retr_info.print_scores()
-
 	def calc_td_idf(self, word):
 		tf = self.term_f[word]
 		idf = math.log10(self.retr_info.total_docs / self.retr_info.get_doc_freq(word))
@@ -51,3 +41,23 @@ class Query:
 	def calc_all_tdidf(self):
 		for t in self.term_f:
 			self.tfidf_dict[t] = self.calc_td_idf(t)
+
+	def run_query(self):
+		self.create_tokens()
+		self.get_freq()
+		self.calc_all_tdidf()
+		self.retr_info.calculate_cosine(self.tfidf_dict)
+
+		sys.stdout = open("query_results.txt", "w")
+		self.retr_info.print_top_results()
+		self.retr_info.print_top_web_results()
+		#self.retr_info.print_scores()
+  
+	def run_query_gui(self):
+		self.create_tokens()
+		self.get_freq()
+		self.calc_all_tdidf()
+		self.retr_info.calculate_cosine(self.tfidf_dict)
+
+		return self.retr_info.get_top_web_results()
+		
