@@ -35,7 +35,8 @@ class Query:
 		self.retr_info.calculate_cosine(self.tfidf_dict)
   
 		sys.stdout = open("query_results.txt", "w")
-		self.retr_info.get_top_results(self.retr_info.scores)
+		self.retr_info.get_top_results()
+		self.retr_info.get_top_web_results()
 		#self.retr_info.print_scores()
 
 	def calc_td_idf(self, word):
