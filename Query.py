@@ -4,7 +4,7 @@ import re
 import retrieval
 import math
 import sys
-
+from nltk.stem import WordNetLemmatizer
 #nltk.download('punkt')
 
 class Query:
@@ -14,15 +14,18 @@ class Query:
 		self.tokens = [] # list of tokens from string 
 		self.retr_info = retrieval.Retrieval()
 		self.tfidf_dict = {} # {term: tfidf}
+  		self.lemm = WordNetLemmatizer()
 
 	def create_tokens(self):
 		self.query.strip()
 		self.query = self.query.lower()
+        
 		self.query = re.sub(r'[^a-zA-Z0-9 ]+', '', self.query)
 		self.tokens = nltk.word_tokenize(self.query)
 
 	def get_freq(self):
 		for word in self.tokens:
+			word = self.lemm.lemmatize(word)
 			if word in self.term_f:
 				self.term_f[word] += 1
 			else:
@@ -35,7 +38,8 @@ class Query:
 		self.retr_info.calculate_cosine(self.tfidf_dict)
   
 		sys.stdout = open("query_results.txt", "w")
-		self.retr_info.get_top_results(self.retr_info.scores)
+		self.retr_info.get_top_results()
+		self.retr_info.get_top_web_results()
 		#self.retr_info.print_scores()
 
 	def calc_td_idf(self, word):
@@ -48,4 +52,3 @@ class Query:
 	def calc_all_tdidf(self):
 		for t in self.term_f:
 			self.tfidf_dict[t] = self.calc_td_idf(t)
-

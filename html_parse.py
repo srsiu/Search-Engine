@@ -10,13 +10,17 @@ import lxml.html
 from bs4 import BeautifulSoup
 import nltk
 #nltk.download('punkt')
+#nltk.download('wordnet')
 from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
 
 
 ### TOKENIZING ###
 class Tokenize:
     def __init__(self):
         self.stop_words = set(stopwords.words('english'))
+        self.lemm = WordNetLemmatizer()
         
     def rem(self, Li:list):
         ''' Splits the input if its an alphanum, and removes all the extra symbols, returns a list
@@ -36,6 +40,7 @@ class Tokenize:
         d = {}
         for word in L:
             word = word.lower()
+            word = self.lemm.lemmatize(word)
             if word not in self.stop_words:
                 if word not in d:
                     d[word]=1
@@ -126,6 +131,7 @@ class InvertedIndex:
     def write_total_docs(self):
         with open('total_num_docs.txt', 'w') as k:
             k.write(str(self.num_of_documents))
+            k.write(str(len(self.invert_ind)))
       
     def write_doc_length(self):
         with open('doc_length.json', 'w') as d:
