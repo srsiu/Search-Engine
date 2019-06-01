@@ -8,23 +8,29 @@ from collections import defaultdict
 import lxml.etree
 import lxml.html
 from bs4 import BeautifulSoup
+import nltk
+#nltk.download('punkt')
+#nltk.download('wordnet')
 from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
 
 
 ### TOKENIZING ###
 class Tokenize:
     def __init__(self):
         self.stop_words = set(stopwords.words('english'))
+        self.lemm = WordNetLemmatizer()
         
     def rem(self, Li:list):
         ''' Splits the input if its an alphanum, and removes all the extra symbols, returns a list
             Complexity: O(N) since it there is only one loop, and splitting the string and checking if its alphanum
         '''
-        pat ="[a-zA-Z0-9']+"
+        pat ="[a-zA-Z0-9]+"
         return re.findall(pat,Li)
 
     def length(self,word):
-   		return len(self.rem(word))
+        return len(self.rem(word))
 
     def make_dict(self, L: list):
         ''' Makes a dictionary with a key of the word and value of the number of occurrences
@@ -33,6 +39,8 @@ class Tokenize:
         '''
         d = {}
         for word in L:
+            word = word.lower()
+            word = self.lemm.lemmatize(word)
             if word not in self.stop_words:
                 if word not in d:
                     d[word]=1
@@ -83,7 +91,8 @@ class InvertedIndex:
             
             file_name = os.path.join(".", "WEBPAGES_RAW", dir, file)
 
-            # i += 1
+            #print("FILE:", file_name, "|", file, "|", dir)
+            #i += 1
             #if i > 12:
             #    break
             if file_name != None:
@@ -101,7 +110,7 @@ class InvertedIndex:
                     self.create_index(tf, folder, self.invert_ind, html_tags)
 
     def calculate_tf_idf(self, tf, tid,  N, df):
-        return (tf/tid * math.log10(N / df))
+        return (1+ math.log10(tf) * math.log10(N / df))
 
     def calculate_all_tf_idf(self):
         for term in self.invert_ind:
@@ -118,12 +127,11 @@ class InvertedIndex:
     def write_inverted_ind(self):
         with open('inverted_index.json', 'w') as j:
             json.dump(self.invert_ind, j)
-        
-        #print(len(self.invert_ind)) 569618
 
     def write_total_docs(self):
-    	with open('total_num_docs.txt', 'w') as k:
-    		k.write(str(self.num_of_documents))
+        with open('total_num_docs.txt', 'w') as k:
+            k.write(str(self.num_of_documents))
+            k.write(str(len(self.invert_ind)))
       
     def write_doc_length(self):
         with open('doc_length.json', 'w') as d:
