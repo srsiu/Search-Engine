@@ -1,4 +1,3 @@
-
 import nltk
 import re
 import retrieval
@@ -6,6 +5,7 @@ import math
 import sys
 from nltk.stem import WordNetLemmatizer
 #nltk.download('punkt')
+nltk.download('wordnet')
 
 class Query:
 	def __init__(self, query):

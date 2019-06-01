@@ -1,8 +1,9 @@
 import json
 import os
 import re
+import sys
+import math
 import operator
-import itertools
 from collections import defaultdict
 
 import lxml.etree
@@ -10,6 +11,9 @@ import lxml.html
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 
+import html_parse
+import itertools
+import Query
 
 class Retrieval:
     def __init__(self):
@@ -28,23 +32,24 @@ class Retrieval:
         for term in tfidf_dict:
             for x in range(0, len(self.invert_ind[term])):
                 docID = self.invert_ind[term][x]["docID"]
+                tag = self.invert_ind[term][x]["html_tags"]
+                j = 0
                 if docID in self.scores:
-                    self.scores[docID] += self.invert_ind[term][x]["tf-idf"] * \
-                        tfidf_dict[term]
+                	if tag == 1:
+                		j = .25
+                	self.scores[docID] += (self.invert_ind[term][x]["tf-idf"] * tfidf_dict[term] ) + j
                 else:
-                    self.scores[docID] = self.invert_ind[term][x]["tf-idf"] * \
-                        tfidf_dict[term]
+                	if tag == 1:
+                		j = .25
+                	self.scores[docID] = (self.invert_ind[term][x]["tf-idf"] * tfidf_dict[term] ) + j
                     
         for docID in self.scores:
             self.scores[docID] = self.scores[docID] / self.doc_l[docID]
     
-    def print_top_results(self):
+    def get_top_results(self):
         sorted_list = sorted(self.scores.items(), key=lambda x: x[1], reverse=True)
         sorted_dict = dict(sorted_list)
-        
-        x = itertools.islice(sorted_dict.items(), 0, 20)
-        for item in x:
-            print(item)
+        return sorted_dict
 
     def print_inverted_ind(self):
         for term, l in self.invert_ind.items():
@@ -58,23 +63,19 @@ class Retrieval:
         for docID in self.scores:
             print(docID, ":", self.scores[docID])
             
-    def print_top_web_results(self):
-        i = 0
+    def get_top_web_results(self):
+        length = 0
         for docID in self.scores:
-            print(self.webpage_dict[docID])
+            if self.scores[docID] != 0:
+                length += 1
+        i = 1
+        for docID in self.scores:
+            print("Number of results: ", length)
+            print(i,self.webpage_dict[docID])
             i += 1
-            if i > 20:
+            if i > 21:
                 break
 
-    def get_top_web_results(self):
-        i = 0
-        top_results = list()
-        for docID in self.scores:
-            top_results.append(self.webpage_dict[docID])
-            i += 1
-            if i > 19:
-                break
-        return top_results
 
 if __name__ == '__main__':
     sys.stdout = open("retrieval_out.txt", "w")  # OUTPUT to file called output.txt

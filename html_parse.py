@@ -89,7 +89,6 @@ class InvertedIndex:
         # FORMAT: { term: [ {freq: #, docID: #}, ...]}
         # Should add - html_tags: type (ex: h1, h2, h3, p)
 
-        i = 0 # Remove after finishing testing
         for folder in self.webpage_dict:
             address = folder.split("/")
             dir = address[0] # Strings
@@ -97,10 +96,6 @@ class InvertedIndex:
             
             file_name = os.path.join(".", "WEBPAGES_RAW", dir, file)
 
-            #print("FILE:", file_name, "|", file, "|", dir)
-            #i += 1
-            #if i > 12:
-            #    break
             if file_name != None:
                 
                 self.num_of_documents += 1
@@ -168,7 +163,8 @@ class InvertedIndex:
 
 
     def calculate_tf_idf(self, tf, tid,  N, df):
-        return (1+ math.log10(tf) * math.log10(N / df))
+        # return (1+ math.log10(tf) * math.log10(N / df))
+        return (math.log10(tf) * (math.log10(N / df)+1))
 
     def calculate_all_tf_idf(self):
         for term in self.invert_ind:
@@ -178,9 +174,9 @@ class InvertedIndex:
                     self.invert_ind[term][x]["freq"], self.doc_length[self.invert_ind[term][x]["docID"]],
                     self.num_of_documents, len(self.invert_ind[term]))
 
-    def print_inverted_ind(self):
-        for term, l in self.invert_ind.items():
-           print(term, ":", l)
+    # def print_inverted_ind(self):
+    #     for term, l in self.invert_ind.items():
+    #        print(term, ":", l)
            
     def write_inverted_ind(self):
         with open('inverted_index.json', 'w') as j:
@@ -189,8 +185,13 @@ class InvertedIndex:
     def write_total_docs(self):
         with open('total_num_docs.txt', 'w') as k:
             k.write(str(self.num_of_documents))
+            k.write("\n")
             k.write(str(len(self.invert_ind)))
-      
+
+    def print_total_docs(self):
+        print("The number of documents = ", self.num_of_documents)
+        print("The number of unique words = ", len(self.invert_ind))
+        print("The size of our inverted index =", sys.getsizeof(self.invert_ind))
     def write_doc_length(self):
         with open('doc_length.json', 'w') as d:
             json.dump(self.doc_length, d)
@@ -202,4 +203,5 @@ if __name__ == '__main__':
     i.html_parse()
     i.calculate_all_tf_idf()
     i.print_inverted_ind()
+
 
