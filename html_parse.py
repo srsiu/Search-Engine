@@ -1,7 +1,6 @@
 import json
 import os
 import re
-import sys
 import math
 from collections import defaultdict
 
@@ -105,7 +104,7 @@ class InvertedIndex:
                     self.create_index(tf, folder, self.invert_ind, html_tags)
 
     def calculate_tf_idf(self, tf, tid,  N, df):
-        return (1+ math.log10(tf) * math.log10(N / df))
+        return (1 + math.log10(tf)) * math.log10(N / df)
 
     def calculate_all_tf_idf(self):
         for term in self.invert_ind:

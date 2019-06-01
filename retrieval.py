@@ -1,9 +1,8 @@
 import json
 import os
 import re
-import sys
-import math
 import operator
+import itertools
 from collections import defaultdict
 
 import lxml.etree
@@ -11,9 +10,6 @@ import lxml.html
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 
-import html_parse
-import itertools
-import Query
 
 class Retrieval:
     def __init__(self):
@@ -42,7 +38,7 @@ class Retrieval:
         for docID in self.scores:
             self.scores[docID] = self.scores[docID] / self.doc_l[docID]
     
-    def get_top_results(self):
+    def print_top_results(self):
         sorted_list = sorted(self.scores.items(), key=lambda x: x[1], reverse=True)
         sorted_dict = dict(sorted_list)
         
@@ -62,7 +58,7 @@ class Retrieval:
         for docID in self.scores:
             print(docID, ":", self.scores[docID])
             
-    def get_top_web_results(self):
+    def print_top_web_results(self):
         i = 0
         for docID in self.scores:
             print(self.webpage_dict[docID])
@@ -70,6 +66,15 @@ class Retrieval:
             if i > 20:
                 break
 
+    def get_top_web_results(self):
+        i = 0
+        top_results = list()
+        for docID in self.scores:
+            top_results.append(self.webpage_dict[docID])
+            i += 1
+            if i > 20:
+                break
+        return top_results
 
 if __name__ == '__main__':
     sys.stdout = open("retrieval_out.txt", "w")  # OUTPUT to file called output.txt
