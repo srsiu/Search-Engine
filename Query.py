@@ -1,3 +1,4 @@
+
 import nltk
 import re
 import retrieval
@@ -34,12 +35,11 @@ class Query:
 		self.retr_info.calculate_cosine(self.tfidf_dict)
   
 		sys.stdout = open("query_results.txt", "w")
-		self.retr_info.get_top_results()
+		self.retr_info.get_top_results(self.retr_info.scores)
 		#self.retr_info.print_scores()
-		self.retr_info.get_top_web_results()
 
 	def calc_td_idf(self, word):
-		tf = self.term_f[word] / len(self.tokens)
+		tf = self.term_f[word]
 		idf = math.log10(self.retr_info.total_docs / self.retr_info.get_doc_freq(word))
 
 		tf_idf = tf * idf
@@ -48,6 +48,4 @@ class Query:
 	def calc_all_tdidf(self):
 		for t in self.term_f:
 			self.tfidf_dict[t] = self.calc_td_idf(t)
-
-
 
